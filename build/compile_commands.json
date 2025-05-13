@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/nicholaschan/Documents/Projects/cpp-loadbalancer/build",
+  "command": "/usr/bin/clang++   -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -mmacosx-version-min=15.1 -o CMakeFiles/app.dir/main.cpp.o -c /Users/nicholaschan/Documents/Projects/cpp-loadbalancer/main.cpp",
+  "file": "/Users/nicholaschan/Documents/Projects/cpp-loadbalancer/main.cpp",
+  "output": "CMakeFiles/app.dir/main.cpp.o"
+}
+]

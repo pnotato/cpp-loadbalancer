@@ -18,7 +18,7 @@ class TCPServer {
         );
 
         // Start Listening
-        void start(LoadBalancer lb);
+        void start(LoadBalancer &lb);
 
         // Stop Listening
         void stop();

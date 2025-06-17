@@ -11,9 +11,8 @@
 class LoadBalancer {
     public:
         LoadBalancer(std::vector<std::string> servers);
-
         void handle_connection(int client_socket);
-        
+        std::string get_current_server();
 
     private:
         std::vector<std::string> servers; // keeps a list of servers

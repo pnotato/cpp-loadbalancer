@@ -19,7 +19,7 @@ TCPServer::TCPServer(int port)
     std::cout << "Server is listening on port " << this->port << std::endl;
 }
 
-void TCPServer::start(LoadBalancer lb) {
+void TCPServer::start(LoadBalancer &lb) {
     this->is_running = true;
     std::cout << "Starting server..." << std::endl;
 
@@ -36,9 +36,10 @@ void TCPServer::start(LoadBalancer lb) {
         
         char client_ip[INET_ADDRSTRLEN];
         inet_ntop(AF_INET, &client.sin_addr, client_ip, client_size);
-        std::cout << "Accepting connection from IP: " << client_ip << std::endl; 
+        std::cout << "Accepting connection from IP: " << client_ip << ". Forwarding to " << lb.get_current_server() << "!" << std::endl; 
 
-        std::thread t(&TCPServer::handle_client, this, client_socket);
+        // std::thread t(&TCPServer::handle_client, this, client_socket);
+        std::thread t(&LoadBalancer::handle_connection, &lb, client_socket);
         t.detach();
     }
 }

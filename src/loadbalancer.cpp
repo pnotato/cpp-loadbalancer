@@ -44,6 +44,10 @@ void LoadBalancer::handle_connection(int client_socket) {
 
 }
 
+std::string LoadBalancer::get_current_server() {
+    return this->servers[this->index];
+}
+
 // Uses Round-robin!
 std::string LoadBalancer::get_next_server() {
     std::string res = this->servers[this->index];

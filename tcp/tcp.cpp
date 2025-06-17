@@ -1,4 +1,5 @@
 #include "tcp.h"
+#define BUF_SIZE 4096
 
 TCPServer::TCPServer(int port) 
 {
@@ -9,7 +10,18 @@ TCPServer::TCPServer(int port)
 
 bool TCPServer::init()
 {
-
+    this->server_socket = create_socket();
+    if (this->server_socket == -1) {
+        std::cerr << "Socket creation failed." << std::endl;
+        return false;
+    }
+    if (listen(this->server_socket, SOMAXCONN) == -1) {
+        std::cerr << "ERROR: Failed to listen on socket." << std::endl;
+        close(this->server_socket);
+        return false;
+    }
+    std::cout << "Server is listening on port " << this->port << std::endl;
+    return true;
 }
 
 int TCPServer::create_socket()
@@ -34,4 +46,52 @@ int TCPServer::create_socket()
         return -1;
     }
     return listening;
+}
+
+void TCPServer::start() {
+    this->is_running = true;
+    std::cout << "Starting server..." << std::endl;
+
+    while (is_running) {
+        sockaddr_in client;
+        socklen_t client_size = sizeof(client);
+
+        int client_socket = accept(this->server_socket, (sockaddr*)&client,  &client_size);
+        if (client_socket == -1)
+        {
+            std::cerr << "ERROR: Failed to accept client connection" << std::endl;
+            continue; // Maybe change this to a break later? 
+        }
+        
+        char client_ip[INET_ADDRSTRLEN];
+        inet_ntop(AF_INET, &client.sin_addr, client_ip, client_size);
+        std::cout << "Accepting connection from IP: " << client_ip << std::endl; 
+
+        std::thread(TCPServer::handle_client, this, client_socket).detach();
+    }
+}
+
+void TCPServer::handle_client(int client_socket) {
+    char buf[BUF_SIZE]; // Maybe change the size of this later. buf stays as a pointer since it's a char array.
+    while(true){
+        memset(buf, 0, BUF_SIZE);
+        int bytes_recieved = recv(this->server_socket, &buf, BUF_SIZE, 0);
+        if (bytes_recieved == -1) {
+            std::cerr << "ERROR: Failed to recieve data" << std::endl;
+        }
+        if (bytes_recieved == 0) {
+            std::cout << "Client disconnected" << std::endl;
+            break; // Since this stops the loop, the thread DIES
+        }
+
+        std::cout << "Recieved Message: " << std::string(buf, 0, bytes_recieved) << std::endl;
+
+        // This is only so clients don't have a stroke that the data isnt http or smt stupid
+        std::string response =
+        "HTTP/1.1 200 OK\r\n"
+        "Content-Type: text/plain\r\n"
+        "Content-Length: 7\r\n"
+        "\r\n"
+        "Message Recieved!!\n";
+    }
 }

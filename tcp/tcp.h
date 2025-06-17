@@ -7,6 +7,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <string.h>
+#include <thread>
 
 class TCPServer {
     public:
@@ -29,8 +30,7 @@ class TCPServer {
         bool is_running;
         sockaddr_in server_addr;
 
-        void accept_client();
         void handle_client(int client_socket);
         int create_socket();
-        void close_socket(int client_socket);
+   
 }

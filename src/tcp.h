@@ -7,7 +7,8 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <string.h>
-#include <thread>
+#include "loadbalancer.h"
+
 
 class TCPServer {
     public:
@@ -15,11 +16,9 @@ class TCPServer {
         TCPServer(
             int port = 8000
         );
-        // Initializing
-        bool init();
 
         // Start Listening
-        void start();
+        void start(LoadBalancer lb);
 
         // Stop Listening
         void stop();
@@ -33,4 +32,4 @@ class TCPServer {
         void handle_client(int client_socket);
         int create_socket();
    
-}
+};

@@ -66,6 +66,6 @@ servers/ $ python server_3.py
 
 You should now be able to send requests (e.g. curl) to the TCP server, which should be distributed accross the 3 backend servers accordingly.
 ```
-curl http:/localhost:8080 // change it to the port you've set the loadbalancer to.
+curl http://localhost:8080 // change it to the port you've set the loadbalancer to.
 ```
 
